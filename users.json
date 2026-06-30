@@ -13,5 +13,20 @@
         "created_at": "2026-06-29T23:27:52"
       }
     ]
+  },
+  {
+    "name": "aditya",
+    "username": "aditya80",
+    "password": "scrypt:32768:8:1$5Kt31k4Ow5fGwHnC$5a60e3c33dffaead289b5f77de86009c4944472c13f2f70bc56d0f225819bcc8b35a96e08701abdadbd0f8dcfdd004ebd703732da8d658fdc2e8c2d6985d99cb",
+    "workouts": [
+      {
+        "id": "15d16bf067c647fc86b911c972e2f7ea",
+        "exercise": "bench press",
+        "sets": 4,
+        "reps": 12,
+        "weight": 50.0,
+        "created_at": "2026-06-30T18:07:18"
+      }
+    ]
   }
 ]
