@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Aditya Singh",
+    "username": "adityasingh00",
+    "password": "scrypt:32768:8:1$OWzNQgtZWk5wesBJ$6fd8280b76d37ec6ce24cfa28419c00fd538864667aa6284f667654b9f32c3b5a82f8becbdee0c11ff709b79908251ab5b989bee32fe269d7091ea7d0310e4b3",
+    "workouts": [
+      {
+        "id": "7bebf9b896474f76aa1be87d52d46b10",
+        "exercise": "lat pull down",
+        "sets": 3,
+        "reps": 15,
+        "weight": 50.0,
+        "created_at": "2026-06-29T23:27:52"
+      }
+    ]
+  }
+]

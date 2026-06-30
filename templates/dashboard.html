@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Gym Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">Gym Workout Tracker</p>
+            <h1>Welcome, {{ user.username }}</h1>
+        </div>
+        <a class="logout-link" href="{{ url_for('logout') }}">Logout</a>
+    </header>
+
+    <main class="dashboard">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <p class="message {{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <section class="stats-grid" aria-label="Workout statistics">
+            <article class="stat-card">
+                <span>Total workouts</span>
+                <strong>{{ total_workouts|default(0) }}</strong>
+            </article>
+            <article class="stat-card">
+                <span>Total volume</span>
+                <strong>{{ '%g'|format(total_volume|default(0)) }}</strong>
+            </article>
+            <article class="stat-card">
+                <span>Heaviest lift</span>
+                <strong>{{ '%g'|format(max_weight|default(0)) }}</strong>
+            </article>
+        </section>
+
+        <section class="panel chart-panel">
+            <div class="section-heading">
+                <h2>Progress chart</h2>
+                <span>Volume by workout</span>
+            </div>
+            {% if workouts %}
+                <div class="chart-wrap">
+                    <canvas id="progressChart" aria-label="Workout progress chart" role="img"></canvas>
+                </div>
+            {% else %}
+                <p class="empty-state">Add workouts to see your progress chart.</p>
+            {% endif %}
+        </section>
+
+        <section class="content-grid">
+            <article class="panel">
+                <h2>Add workout</h2>
+                <form method="POST" action="{{ url_for('add_workout') }}" class="form">
+                    <label for="exercise">Exercise name</label>
+                    <input id="exercise" name="exercise" type="text" placeholder="Bench press" required>
+
+                    <label for="sets">Sets</label>
+                    <input id="sets" name="sets" type="number" min="1" step="1" placeholder="3" required>
+
+                    <label for="reps">Reps</label>
+                    <input id="reps" name="reps" type="number" min="1" step="1" placeholder="10" required>
+
+                    <label for="weight">Weight</label>
+                    <input id="weight" name="weight" type="number" min="0" step="0.5" placeholder="50" required>
+
+                    <button type="submit">Add workout</button>
+                </form>
+            </article>
+
+            <article class="panel">
+                <div class="section-heading">
+                    <h2>Workout history</h2>
+                    <span>{{ total_workouts|default(0) }} saved</span>
+                </div>
+
+                {% if workouts %}
+                    <div class="table-wrap">
+                        <table class="workout-table">
+                            <thead>
+                                <tr>
+                                    <th>Exercise</th>
+                                    <th>Sets</th>
+                                    <th>Reps</th>
+                                    <th>Weight</th>
+                                    <th>Added</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for workout in workouts %}
+                                    <tr>
+                                        <td>{{ workout.exercise }}</td>
+                                        <td>{{ workout.sets }}</td>
+                                        <td>{{ workout.reps }}</td>
+                                        <td>{{ '%g'|format(workout.weight|default(0)) }}</td>
+                                        <td>{{ workout.created_at[:10] if workout.created_at else 'Saved' }}</td>
+                                        <td>
+                                            <form method="POST" action="{{ url_for('delete_workout', workout_id=workout.id) }}" data-confirm="Delete this workout?">
+                                                <button class="delete-button" type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="empty-state">No workouts yet. Add your first workout to start your history.</p>
+                {% endif %}
+            </article>
+        </section>
+    </main>
+    <script id="chartData" type="application/json">{{ chart_data|default([])|tojson }}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
